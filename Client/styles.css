@@ -89,6 +89,8 @@ button {
 .card-back {
     transform: rotateY(180deg) rotateZ(50deg);
     font-size: 28pt;
+    -webkit-user-select: none;
+    -moz-user-select: none;
     user-select: none;
     text-align: center;
     line-height: 100px;
