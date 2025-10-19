@@ -34,7 +34,7 @@ module.exports = function(size, player1, player2) {
             isMatch,
             player,
             gameOver: this.totalMatchs == this.size,
-            playerInfo: this.scores[player],
+            scores: this.scores,
             totalMatchs: this.totalMatchs
         };
     };
