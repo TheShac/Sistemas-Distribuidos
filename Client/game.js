@@ -5,7 +5,7 @@ const selectors = {
     turn : document.querySelector('#turn'),
 }
 
-const emojis = ['🥔', '🍒', '🥑', '🌽', '🥕', '🍇', '🍉', '🍌']
+const emojis = ['♠️', '♥️', '♦️', '♣️', '🎲', '⚜️', '👑', '💰'];
 
 const state = {
     flippedCards: 0,
