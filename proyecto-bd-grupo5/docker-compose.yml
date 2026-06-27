@@ -46,6 +46,22 @@ services:
       - "5433:5432"
     networks:
       - red-insumos-medicos
+# --- RESPALDOS AUTOMÁTICOS CADA 10 MINUTOS ---
+  respaldos-automaticos:
+    image: prodrigestivill/postgres-backup-local:15-alpine
+    container_name: g5-respaldos
+    restart: always
+    volumes:
+      - ./backups:/backups # <--- Los respaldos se guardarán en una carpeta llamada "backups" en tu PC
+    environment:
+      - POSTGRES_HOST=bd-pedidos,bd-inventario,bd-contabilidad # <--- Las 3 BD que debe mirar
+      - POSTGRES_USER=user_pedidos,user_inventario,user_contabilidad
+      - POSTGRES_PASSWORD=password_pedidos,password_inventario,password_contabilidad
+      - POSTGRES_DB=pedidos_db,inventario_db,contabilidad_db
+      - SCHEDULE=@every 10m # <--- ¡LA MAGIA! Ejecuta el respaldo exactamente cada 10 minutos
+      - BACKUP_KEEP_MINS=60 # Borra los respaldos viejos para no colapsar tu disco duro
+    networks:
+      - red-insumos-medicos
   # --- HERRAMIENTA VISUAL: PGADMIN 4 ---
   pgadmin:
     image: dpage/pgadmin4
