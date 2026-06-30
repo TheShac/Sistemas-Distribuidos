@@ -50,22 +50,62 @@ services:
     networks:
       - red-insumos-medicos
 
-  # --- RESPALDOS AUTOMÁTICOS CADA 10 MINUTOS ---
-  respaldos-automaticos:
+  # --- RESPALDOS AUTOMÁTICOS: PEDIDOS ---
+  respaldos-pedidos:
     image: prodrigestivill/postgres-backup-local:15-alpine
-    container_name: g5-respaldos
+    container_name: g5-respaldos-pedidos
     restart: always
     volumes:
-      - ./backups:/backups
+      - ./backups/pedidos:/backups
     environment:
-      - POSTGRES_HOST=bd-pedidos,bd-inventario,bd-contabilidad
-      - POSTGRES_USER=user_pedidos,user_inventario,user_contabilidad
-      - POSTGRES_PASSWORD=password_pedidos,password_inventario,password_contabilidad
-      - POSTGRES_DB=pedidos_db,inventario_db,contabilidad_db
+      - POSTGRES_HOST=bd-pedidos
+      - POSTGRES_USER=user_pedidos
+      - POSTGRES_PASSWORD=password_pedidos
+      - POSTGRES_DB=pedidos_db
       - SCHEDULE=@every 10m
       - BACKUP_KEEP_MINS=60
     networks:
       - red-insumos-medicos
+    depends_on:
+      - bd-pedidos
+
+  # --- RESPALDOS AUTOMÁTICOS: INVENTARIO ---
+  respaldos-inventario:
+    image: prodrigestivill/postgres-backup-local:15-alpine
+    container_name: g5-respaldos-inventario
+    restart: always
+    volumes:
+      - ./backups/inventario:/backups
+    environment:
+      - POSTGRES_HOST=bd-inventario
+      - POSTGRES_USER=user_inventario
+      - POSTGRES_PASSWORD=password_inventario
+      - POSTGRES_DB=inventario_db
+      - SCHEDULE=@every 10m
+      - BACKUP_KEEP_MINS=60
+    networks:
+      - red-insumos-medicos
+    depends_on:
+      - bd-inventario
+
+  # --- RESPALDOS AUTOMÁTICOS: CONTABILIDAD ---
+  respaldos-contabilidad:
+    image: prodrigestivill/postgres-backup-local:15-alpine
+    container_name: g5-respaldos-contabilidad
+    restart: always
+    volumes:
+      - ./backups/contabilidad:/backups
+    environment:
+      - POSTGRES_HOST=bd-contabilidad
+      - POSTGRES_USER=user_contabilidad
+      - POSTGRES_PASSWORD=password_contabilidad
+      - POSTGRES_DB=contabilidad_db
+      - SCHEDULE=@every 10m
+      - BACKUP_KEEP_MINS=60
+    networks:
+      - red-insumos-medicos
+    depends_on:
+      - bd-contabilidad
 
   # --- HERRAMIENTA VISUAL: PGADMIN 4 ---
   pgadmin:
